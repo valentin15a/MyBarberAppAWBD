@@ -18,6 +18,9 @@ public class MainController {
     @GetMapping("/login")
     public String showLogInForm(){ return "login"; }
 
+//    @GetMapping("/register")
+//    public String showRegisterForm(){ return "login"; }
+
     @GetMapping("/access_denied")
     public String accessDeniedPage(){ return "accessDenied"; }
 

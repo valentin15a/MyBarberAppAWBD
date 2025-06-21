@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.awbd.mybarberapp.domain.User;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 @Service
@@ -26,7 +25,7 @@ public class JpaUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user;
 
-        Optional<User> userOpt= userRepository.findByUsername(username);
+        Optional<User> userOpt= userRepository.findByEmail(username);
         if (userOpt.isPresent())
             user = userOpt.get();
         else

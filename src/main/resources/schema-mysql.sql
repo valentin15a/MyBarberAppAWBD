@@ -1,6 +1,11 @@
+-- Dezactivăm temporar verificarea integrității referențiale
+SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS user_authority;
-DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS authority;
+DROP TABLE IF EXISTS user;
+SET FOREIGN_KEY_CHECKS=1;
+
+
 
 
 DROP TABLE IF EXISTS product_category;
@@ -55,6 +60,7 @@ CREATE TABLE user(
                      id BIGINT AUTO_INCREMENT PRIMARY KEY,
                      username VARCHAR(50) NOT NULL,
                      password VARCHAR(100) NOT NULL,
+                     email VARCHAR(100) NOT NULL,
                      enabled BOOLEAN NOT NULL DEFAULT true,
                      account_non_expired BOOLEAN NOT NULL DEFAULT true,
                      account_non_locked BOOLEAN NOT NULL DEFAULT true,

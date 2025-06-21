@@ -1,5 +1,6 @@
 package com.awbd.mybarberapp.domain;
 
+import com.awbd.mybarberapp.services.security.User;
 import jakarta.persistence.*;
 import lombok.*;
 

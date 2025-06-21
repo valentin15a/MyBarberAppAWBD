@@ -29,10 +29,10 @@ public class SecurityJpaConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/webjars/**", "/login", "/resources/**").permitAll()
-                                .requestMatchers("/products/form").hasRole("ADMIN")
-                                .requestMatchers("/products/*").hasAnyRole("ADMIN", "GUEST")
-                        .requestMatchers("/categories/*").hasAnyRole("ADMIN", "GUEST")
+                        .requestMatchers("/", "/webjars/**", "/register","/login", "/resources/**").permitAll()
+                                .requestMatchers("/products/form").hasRole("BARBER")
+                                .requestMatchers("/products/*").hasAnyRole("BARBER", "CLIENT")
+                        .requestMatchers("/categories/*").hasAnyRole("BARBER", "CLIENT")
                         .anyRequest().authenticated()
                 )
                 .userDetailsService(userDetailsService)
@@ -41,6 +41,7 @@ public class SecurityJpaConfig {
                                 .loginPage("/login")
                                 .permitAll()
                                 .loginProcessingUrl("/perform_login")
+                                .usernameParameter("email")
                 )
                 .exceptionHandling(ex -> ex.accessDeniedPage("/access_denied"))
                 .httpBasic(Customizer.withDefaults())

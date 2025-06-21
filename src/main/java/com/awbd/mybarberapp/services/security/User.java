@@ -1,5 +1,6 @@
-package com.awbd.mybarberapp.domain;
+package com.awbd.mybarberapp.services.security;
 
+import com.awbd.mybarberapp.domain.Authority;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,6 +18,7 @@ public class User {
     private Long id;
 
     private String username;
+    private String email;
     private String password;
 
     @Singular
