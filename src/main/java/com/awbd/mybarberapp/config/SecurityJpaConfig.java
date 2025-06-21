@@ -29,9 +29,11 @@ public class SecurityJpaConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/webjars/**", "/register","/login", "/resources/**").permitAll()
-                                .requestMatchers("/products/form").hasRole("BARBER")
-                                .requestMatchers("/products/*").hasAnyRole("BARBER", "CLIENT")
+                        .requestMatchers("/", "/webjars/**", "/register", "/login", "/resources/**").permitAll()
+                        .requestMatchers("/products/form").hasRole("BARBER")
+                        .requestMatchers("/barber/procedures/edit/**").hasRole("BARBER")
+                        .requestMatchers("/barber/procedures/delete/**").hasRole("BARBER") // ← aici!
+                        .requestMatchers("/products/*").hasAnyRole("BARBER", "CLIENT")
                         .requestMatchers("/categories/*").hasAnyRole("BARBER", "CLIENT")
                         .anyRequest().authenticated()
                 )
@@ -42,6 +44,7 @@ public class SecurityJpaConfig {
                                 .permitAll()
                                 .loginProcessingUrl("/perform_login")
                                 .usernameParameter("email")
+                                .defaultSuccessUrl("/login-success", true)
                 )
                 .exceptionHandling(ex -> ex.accessDeniedPage("/access_denied"))
                 .httpBasic(Customizer.withDefaults())

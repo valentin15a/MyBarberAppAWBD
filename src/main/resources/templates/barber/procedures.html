@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Procedurile mele</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
+</head>
+<body>
+<div class="container mt-5">
+
+    <h2 th:text="${form.id == null} ? 'Adaugă procedură nouă' : 'Editează procedura'"></h2>
+
+    <!-- FORMULAR -->
+    <form th:action="@{/barber/procedures}" th:object="${form}" method="post" class="mb-4">
+        <input type="hidden" th:field="*{id}"/>
+
+        <div class="row">
+            <div class="col-md-5">
+                <label class="form-label">Numele procedurii</label>
+                <input type="text" th:field="*{procedureName}" class="form-control" placeholder="ex: Tuns, Vopsit" required>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Preț (RON)</label>
+                <input type="number" step="0.5" min="0" th:field="*{price}" class="form-control" required>
+            </div>
+            <div class="col-md-4 align-self-end">
+                <button type="submit" class="btn btn-primary w-100"
+                        th:text="${form.id == null} ? 'Adaugă procedura' : 'Salvează modificările'">
+                    Trimite
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <!-- LISTĂ PROCEDURI -->
+    <h4 class="mt-4">Procedurile tale:</h4>
+    <table class="table table-bordered">
+        <thead class="table-light">
+        <tr>
+            <th>Nume</th>
+            <th>Preț</th>
+            <th>Acțiuni</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${procedures}">
+            <td th:text="${p.procedureName}">N/A</td>
+            <td th:text="${p.price}">0</td>
+            <td>
+                <a th:href="@{/barber/procedures/edit/{id}(id=${p.id})}" class="btn btn-warning btn-sm">Edit</a>
+                <a th:href="@{/barber/procedures/delete/{id}(id=${p.id})}" class="btn btn-danger btn-sm"
+                   onclick="return confirm('Ești sigur că vrei să ștergi această procedură?')">Șterge</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>
