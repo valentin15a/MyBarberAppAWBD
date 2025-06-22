@@ -74,7 +74,7 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         // Obține orele deja rezervate
         List<String> bookedHours = appointmentRepository.findByBarberIdAndDate(barberId, date)
-                .stream()
+                .stream().filter(appt -> appt.getStatus() == AppointmentStatus.CREATED)
                 .map(Appointment::getTime)
                 .toList();
 
@@ -105,9 +105,10 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         return allAppointments.stream()
                 .filter(appt -> appt.getStatus() != AppointmentStatus.CREATED) // excludem doar cele noi
-                .map(appt -> appointmentMapper.toDto(appt, clientNameResolver,barberNameResolver)) // ← dacă folosești @Context
+                .map(appt -> appointmentMapper.toDto(appt, clientNameResolver, barberNameResolver)) // ← dacă folosești @Context
                 .toList();
     }
+
     @Override
     public List<AppointmentDTO> getByClientIdDto(Long clientId) {
         return appointmentRepository.findByClientId(clientId).stream()
@@ -137,9 +138,6 @@ public class AppointmentServiceImpl implements AppointmentService {
         return filtered.map(appt -> appointmentMapper.toDto(appt, clientNameResolver, barberNameResolver));
 
     }
-
-
-
 
 
 }
