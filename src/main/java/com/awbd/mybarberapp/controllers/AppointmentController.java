@@ -68,13 +68,11 @@ public class AppointmentController {
                                     Authentication authentication,
                                     RedirectAttributes redirectAttributes) {
 
-        // Obține utilizatorul curent
         String username = authentication.getName();
         User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         Long clientId = user.getId();
 
-        // Obține toate serviciile selectate
         List<HairProcedure> selectedProcedures = dto.getHairProcedureIds()
                 .stream()
                 .map(hairProcedureService::findById) //
@@ -82,13 +80,9 @@ public class AppointmentController {
 
 
 
-        // Calculează preț total
         Double priceObj = dto.getTotalPrice();
         double total = priceObj != null ? priceObj : 0.0;
 
-
-
-        // Creează și salvează programarea
         Appointment appointment = Appointment.builder()
                 .barberId(dto.getBarberId())
                 .clientId(clientId)

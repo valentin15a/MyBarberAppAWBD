@@ -54,7 +54,7 @@ public class BarberController {
         appointment.setStatus(AppointmentStatus.valueOf(status.toUpperCase()));
         appointmentService.save(appointment);
 
-        return "redirect:/barber"; // 🔁 Înapoi la homepage după acțiune
+        return "redirect:/barber";
     }
 
     @GetMapping("/appointments/history")

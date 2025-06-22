@@ -66,7 +66,6 @@ public class BarberProcedureServiceImpl implements BarberProcedureService {
     public void saveOrUpdate(BarberProcedureDTO dto) {
         String name = dto.getProcedureName().trim();
         System.out.println("💾 HairProcedure Name= " + name);
-        // 🔍 Găsește sau creează procedura
         HairProcedure procedure = hairProcedureRepository.findByName(name).orElse(null);
         if (procedure == null) {
             procedure = new HairProcedure();
@@ -77,11 +76,10 @@ public class BarberProcedureServiceImpl implements BarberProcedureService {
             System.out.println("✅ HairProcedure exists: ID = " + procedure.getId());
         }
 
-        // 🔍 Găsește frizerul (Account)
+
         Account barber = accountRepository.findById(dto.getBarberId())
                 .orElseThrow(() -> new UsernameNotFoundException("Barber not found"));
 
-        // 🔄 Procedură nouă sau actualizare
         BarberProcedure bp;
         if (dto.getId() != null) {
             bp = repository.findById(dto.getId())
@@ -93,7 +91,7 @@ public class BarberProcedureServiceImpl implements BarberProcedureService {
             System.out.println("➕ NEW BP for barber ID = " + barber.getId());
         }
 
-        // 🔗 Setează legăturile finale
+
         bp.setProcedure(procedure);
         bp.setPrice(dto.getPrice());
 

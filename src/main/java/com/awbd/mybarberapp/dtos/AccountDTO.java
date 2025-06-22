@@ -21,5 +21,5 @@ public class AccountDTO {
     private String confirmPassword;
 
     @NotBlank(message = "Rolul este obligatoriu")
-    private String role; // Ex: "ROLE_CLIENT", "ROLE_BARBER"
+    private String role;
 }

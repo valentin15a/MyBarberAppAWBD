@@ -64,21 +64,21 @@ public class AppointmentServiceImpl implements AppointmentService {
 
     @Override
     public List<String> getAvailableHoursForBarber(Long barberId, LocalDate date) {
-        // Găsește ziua săptămânii
+
         DayOfWeek day = date.getDayOfWeek();
 
-        // Obține programul frizerului pentru ziua respectivă
+
         List<String> scheduledHours = barberScheduleRepository.findByBarberIdAndDay(barberId, day)
                 .map(schedule -> schedule.getHours())
                 .orElse(List.of());
 
-        // Obține orele deja rezervate
+
         List<String> bookedHours = appointmentRepository.findByBarberIdAndDate(barberId, date)
                 .stream().filter(appt -> appt.getStatus() == AppointmentStatus.CREATED)
                 .map(Appointment::getTime)
                 .toList();
 
-        // Filtrare: ore din program care nu sunt deja rezervate
+
         return scheduledHours.stream()
                 .filter(hour -> !bookedHours.contains(hour))
                 .toList();
@@ -89,7 +89,7 @@ public class AppointmentServiceImpl implements AppointmentService {
         List<Appointment> appointments = appointmentRepository
                 .findByBarberIdAndStatus(barberId, AppointmentStatus.valueOf(status));
 
-        // 👉 Sortează după dată și oră
+
         appointments.sort(Comparator
                 .comparing(Appointment::getDate)
                 .thenComparing(Appointment::getTime));

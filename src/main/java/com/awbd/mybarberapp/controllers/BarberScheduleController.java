@@ -31,7 +31,7 @@ public class BarberScheduleController {
         List<BarberScheduleDTO> schedule = scheduleService.getAllSchedulesForBarber(user.getId());
 
         model.addAttribute("schedule", schedule);
-        model.addAttribute("form", new BarberScheduleDTO()); // formular pentru adăugare
+        model.addAttribute("form", new BarberScheduleDTO());
         return "barber/schedule"; // ← view HTML
     }
 

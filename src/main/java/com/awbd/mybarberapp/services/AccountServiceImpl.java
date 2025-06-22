@@ -23,7 +23,6 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void registerAccount(AccountDTO dto) {
-        // validare simplă
         if (accountRepository.findByEmail(dto.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email deja folosit");
         }
@@ -36,7 +35,6 @@ public class AccountServiceImpl implements AccountService {
         account.setPassword(passwordEncoder.encode(dto.getPassword()));
         account.setEnabled(true);
 
-        // atribuim rolul implicit
         String requestedRole = dto.getRole().toUpperCase().trim();
 
         Authority role = authorityRepository.findByRole(requestedRole)
