@@ -5,12 +5,12 @@ import lombok.*;
 import java.time.LocalDate;
 import java.util.List;
 
-@Entity
 @Table(name = "appointment")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Entity
 public class Appointment {
 
     @Id
@@ -19,24 +19,23 @@ public class Appointment {
 
     private LocalDate date;
 
-    private String time; // ex: "10:30"
+    private String time;
 
     @ManyToMany
     @JoinTable(
             name = "appointment_procedures",
             joinColumns = @JoinColumn(name = "appointment_id"),
-            inverseJoinColumns = @JoinColumn(name = "barber_procedure_id")
+            inverseJoinColumns = @JoinColumn(name = "procedure_id")
     )
-    private List<BarberProcedure> services;
+    private List<HairProcedure> procedures;
 
     @Enumerated(EnumType.STRING)
     private AppointmentStatus status = AppointmentStatus.CREATED;
 
     private double price;
 
-    @Column(name = "client_id")
     private Long clientId;
 
-    @Column(name = "barber_id")
     private Long barberId;
 }
+

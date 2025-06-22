@@ -11,7 +11,6 @@ public class MainController {
 
     @RequestMapping("")
     public String productForm() {
-
         return "main";
     }
 
