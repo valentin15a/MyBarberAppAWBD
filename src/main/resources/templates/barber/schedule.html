@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Programul Frizerului</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid"><a class="navbar-brand" th:href="@{/barber}">BarberPanel</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link" th:href="@{/barber}">Acasa</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/barber/procedures}">Servicii</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/barber/schedule}">Program</a></li>
+            </ul>
+            <form th:action="@{/logout}" method="post" class="d-flex">
+                <button class="btn btn-outline-light" type="submit">Logout</button>
+            </form>
+        </div>
+    </div>
+</nav>
+<div class="container mt-5">
+    <h2>Setează programul tău</h2>
+    <!-- FORMULAR -->
+    <form th:action="@{/barber/schedule}" method="post" th:object="${form}">
+        <div class="mb-3">
+            <label for="day" class="form-label">Ziua săptămânii</label>
+            <select th:field="*{day}" class="form-select" id="day" required>
+                <option th:each="d : ${T(java.time.DayOfWeek).values()}"
+                        th:value="${d}"
+                        th:text="${#strings.capitalize(d.name().toLowerCase())}">
+                </option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Ore disponibile</label>
+            <div class="row">
+                <div class="col-md-2 mb-2" th:each="h : ${#numbers.sequence(8, 18)}">
+                    <input type="checkbox"
+                           th:value="${h + ':00'}"
+                           th:field="*{hours}"
+                           class="form-check-input me-1">
+                    <label th:text="${h + ':00'}"></label>
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Salvează programul</button>
+    </form>
+
+    <!-- PROGRAM EXISTENT -->
+    <h4 class="mt-5">Programul tău curent:</h4>
+    <ul class="list-group" th:if="${schedule != null}">
+        <li class="list-group-item d-flex justify-content-between align-items-center" th:each="s : ${schedule}">
+            <div>
+                <strong th:text="${#strings.capitalize(s.day.toString().toLowerCase())}"></strong>:
+                <span th:text="${#lists.isEmpty(s.hours) ? 'Fără program' : s.hours}"></span>
+            </div>
+            <div>
+                <a th:href="@{'/barber/schedule/edit/' + ${s.day}}" class="btn btn-sm btn-outline-secondary">Editează</a>
+            </div>
+        </li>
+    </ul>
+
+</div>
+
+<script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

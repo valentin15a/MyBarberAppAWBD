@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Programările mele</title>
+    <title>Istoric programări</title>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
 </head>
 <body class="bg-light">
-
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid"><a class="navbar-brand" th:href="@{/client}">ClientPanel</a>
+    <div class="container-fluid"><a class="navbar-brand" th:href="@{/barber}">BarberPanel</a>
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link" th:href="@{/client}">Acasa</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/client/appointments/new}">Programare Noua</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/barber}">Acasa</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/barber/procedures}">Servicii</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/barber/schedule}">Program</a></li>
             </ul>
             <form th:action="@{/logout}" method="post" class="d-flex">
                 <button class="btn btn-outline-light" type="submit">Logout</button>
@@ -22,37 +22,32 @@
 </nav>
 
 <div class="container mt-5">
-    <h2>Programările mele</h2>
+    <h2>Istoric programări</h2>
 
-    <div th:if="${#lists.isEmpty(myAppointments)}">
-        <div class="alert alert-info">Nu ai programări înregistrate încă.</div>
+    <div th:if="${#lists.isEmpty(historyAppointments)}">
+        <div class="alert alert-info">Nu ai programări anterioare.</div>
     </div>
 
-    <div th:if="${!#lists.isEmpty(myAppointments)}">
+    <div th:if="${!#lists.isEmpty(historyAppointments)}">
         <table class="table table-bordered table-striped mt-4">
             <thead class="table-dark">
             <tr>
                 <th>
-                    <a th:href="@{/client(page=0, sortField=${'barberName'}, sortDir=${reverseSortDir})}" class="text-light text-decoration-none">
-                        Frizer
-                        <i th:class="${sortField == 'barberName'} ? (${sortDir == 'asc'} ? 'bi bi-arrow-up' : 'bi bi-arrow-down') : ''"></i>
+                    <a th:href="@{/barber/appointments/history(page=0, sortField=${'clientName'}, sortDir=${reverseSortDir})}" class="text-light text-decoration-none">
+                        Client
+                        <i th:class="${sortField == 'clientName'} ? (${sortDir == 'asc'} ? 'bi bi-arrow-up' : 'bi bi-arrow-down') : ''"></i>
                     </a>
                 </th>
                 <th>
-                    <a th:href="@{/client(page=0, sortField=${'date'}, sortDir=${reverseSortDir})}" class="text-light text-decoration-none">
+                    <a th:href="@{/barber/appointments/history(page=0, sortField=${'date'}, sortDir=${reverseSortDir})}" class="text-light text-decoration-none">
                         Data
                         <i th:class="${sortField == 'date'} ? (${sortDir == 'asc'} ? 'bi bi-arrow-up' : 'bi bi-arrow-down') : ''"></i>
                     </a>
                 </th>
-                <th>
-                    <a th:href="@{/client(page=0, sortField=${'time'}, sortDir=${reverseSortDir})}" class="text-light text-decoration-none">
-                        Ora
-                        <i th:class="${sortField == 'time'} ? (${sortDir == 'asc'} ? 'bi bi-arrow-up' : 'bi bi-arrow-down') : ''"></i>
-                    </a>
-                </th>
+                <th>Ora</th>
                 <th>Servicii</th>
                 <th>
-                    <a th:href="@{/client(page=0, sortField=${'totalPrice'}, sortDir=${reverseSortDir})}" class="text-light text-decoration-none">
+                    <a th:href="@{/barber/appointments/history(page=0, sortField=${'totalPrice'}, sortDir=${reverseSortDir})}" class="text-light text-decoration-none">
                         Preț
                         <i th:class="${sortField == 'totalPrice'} ? (${sortDir == 'asc'} ? 'bi bi-arrow-up' : 'bi bi-arrow-down') : ''"></i>
                     </a>
@@ -60,14 +55,13 @@
                 <th>Status</th>
             </tr>
             </thead>
-
             <tbody>
-            <tr th:each="appt : ${myAppointments}">
-                <td th:text="${appt.barberName} ?: 'N/A'"></td>
+            <tr th:each="appt : ${historyAppointments}">
+                <td th:text="${appt.clientName} ?: 'N/A'"></td>
                 <td th:text="${appt.date}"></td>
                 <td th:text="${appt.time}"></td>
                 <td>
-                    <ul>
+                    <ul class="mb-0">
                         <li th:each="proc : ${appt.procedureNames}" th:text="${proc}"></li>
                     </ul>
                 </td>
@@ -82,12 +76,13 @@
             </tbody>
         </table>
 
+        <!-- PAGINARE -->
         <nav th:if="${totalPages > 1}" class="mt-3">
             <ul class="pagination justify-content-center">
                 <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
                     th:classappend="${i == currentPage} ? 'active'">
                     <a class="page-link"
-                       th:href="@{/client(page=${i}, sortField=${sortField}, sortDir=${sortDir})}"
+                       th:href="@{/barber/appointments/history(page=${i}, sortField=${sortField}, sortDir=${sortDir})}"
                        th:text="${i + 1}">1</a>
                 </li>
             </ul>

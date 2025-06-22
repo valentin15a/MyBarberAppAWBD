@@ -1,61 +1,45 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Înregistrare cont</title>
+<head><title>Înregistrare cont</title>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
 </head>
 <body class="bg-light">
 <div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <h2 class="mb-4">Creează cont</h2>
-
-            <form th:action="@{/register}" th:object="${user}" method="post">
-                <!-- Username -->
-                <div class="mb-3">
-                    <label class="form-label">Username</label>
-                    <input type="text" th:field="*{username}" class="form-control" placeholder="ex: vali123">
+        <div class="col-md-6"><h2 class="mb-4">Creează cont</h2>
+            <form th:action="@{/register}" th:object="${user}" method="post"> <!-- Username -->
+                <div class="mb-3"><label class="form-label">Username</label> <input type="text" th:field="*{username}"
+                                                                                    class="form-control"
+                                                                                    placeholder="ex: user123">
                     <div class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
-                </div>
+                </div> <!-- Email -->
+                <div class="mb-3"><label class="form-label">Email</label> <input type="email" th:field="*{email}"
+                                                                                 class="form-control"
+                                                                                 placeholder="ex: user@mail.com">
+                    <div class="alert alert-danger" th:if="${registrationError}" th:text="${registrationError}"></div>
 
-                <!-- Email -->
-                <div class="mb-3">
-                    <label class="form-label">Email</label>
-                    <input type="email" th:field="*{email}" class="form-control" placeholder="ex: vali@mail.com">
-                    <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
-                </div>
-
-                <!-- Parola -->
-                <div class="mb-3">
-                    <label class="form-label">Parolă</label>
-                    <input type="password" th:field="*{password}" class="form-control">
+                </div> <!-- Parola -->
+                <div class="mb-3"><label class="form-label">Parolă</label> <input type="password" th:field="*{password}"
+                                                                                  class="form-control">
                     <div class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
-                </div>
-
-                <!-- Confirmare parolă -->
-                <div class="mb-3">
-                    <label class="form-label">Confirmă parola</label>
-                    <input type="password" th:field="*{confirmPassword}" class="form-control">
-                    <div class="text-danger" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"></div>
-                </div>
-
-                <!-- Rol -->
-                <div class="mb-3">
-                    <label class="form-label">Tip cont</label>
-                    <select th:field="*{role}" class="form-select">
-                        <option value="">Selectează...</option>
-                        <option value="ROLE_CLIENT">Client</option>
-                        <option value="ROLE_BARBER">Frizer</option>
-                    </select>
+                </div> <!-- Confirmare parolă -->
+                <div class="mb-3"><label class="form-label">Confirmă parola</label> <input type="password"
+                                                                                           th:field="*{confirmPassword}"
+                                                                                           class="form-control">
+                    <div class="text-danger" th:if="${#fields.hasErrors('confirmPassword')}"
+                         th:errors="*{confirmPassword}"></div>
+                </div> <!-- Rol -->
+                <div class="mb-3"><label class="form-label">Tip cont</label> <select th:field="*{role}"
+                                                                                     class="form-select">
+                    <option value="">Selectează...</option>
+                    <option value="ROLE_CLIENT">Client</option>
+                    <option value="ROLE_BARBER">Frizer</option>
+                </select>
                     <div class="text-danger" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></div>
                 </div>
-
                 <button type="submit" class="btn btn-primary w-100">Înregistrează-te</button>
             </form>
-
-            <div class="mt-3 text-center">
-                <a th:href="@{/login}">Ai deja cont? Autentifică-te</a>
-            </div>
+            <div class="mt-3 text-center"><a th:href="@{/login}">Ai deja cont? Autentifică-te</a></div>
         </div>
     </div>
 </div>

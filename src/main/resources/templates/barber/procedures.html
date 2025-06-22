@@ -5,6 +5,20 @@
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}">
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid"><a class="navbar-brand" th:href="@{/barber}">BarberPanel</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link" th:href="@{/barber}">Acasa</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/barber/procedures}">Servicii</a></li>
+                <li class="nav-item"><a class="nav-link" th:href="@{/barber/schedule}">Program</a></li>
+            </ul>
+            <form th:action="@{/logout}" method="post" class="d-flex">
+                <button class="btn btn-outline-light" type="submit">Logout</button>
+            </form>
+        </div>
+    </div>
+</nav>
 <div class="container mt-5">
 
     <h2 th:text="${form.id == null} ? 'Adaugă procedură nouă' : 'Editează procedura'"></h2>
