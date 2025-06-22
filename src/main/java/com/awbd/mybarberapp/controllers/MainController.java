@@ -11,7 +11,7 @@ public class MainController {
 
     @RequestMapping("")
     public String productForm() {
-        return "main";
+        return "redirect:/client/";
     }
 
     @GetMapping("/login")

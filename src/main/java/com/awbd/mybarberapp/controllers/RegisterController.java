@@ -36,7 +36,7 @@ public class RegisterController {
             return "register";
         }
 
-        return "redirect:/login?success";
+        return "success";
     }
 }
 

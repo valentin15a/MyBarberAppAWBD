@@ -16,7 +16,7 @@ public class LoginRedirectController {
         boolean isBarber = roles.stream()
                 .anyMatch(r -> r.getAuthority().equals("ROLE_BARBER"));
 
-        return isBarber ? "redirect:/barber/home" : "redirect:/";
+        return isBarber ? "redirect:/barber" : "redirect:/client";
     }
 }
 

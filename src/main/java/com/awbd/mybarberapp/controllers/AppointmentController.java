@@ -22,7 +22,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Controller
-@RequestMapping("/appointments")
+@RequestMapping("client/appointments")
 @RequiredArgsConstructor
 public class AppointmentController {
 
@@ -53,6 +53,7 @@ public class AppointmentController {
 
         return "appointments/form";
     }
+
     @GetMapping("/available-hours")
     @ResponseBody
     public List<String> getAvailableHours(@RequestParam Long barberId,
@@ -69,7 +70,7 @@ public class AppointmentController {
 
         // Obține utilizatorul curent
         String username = authentication.getName();
-        User user = userRepository.findByUsername(username)
+        User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         Long clientId = user.getId();
 
@@ -99,7 +100,7 @@ public class AppointmentController {
                 .build();
 
         appointmentService.save(appointment);
-        return "redirect:/appointments/success";
+        return "redirect:/client/appointments/success";
     }
 
     @GetMapping("/success")

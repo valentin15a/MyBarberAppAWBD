@@ -25,7 +25,7 @@ public class BarberScheduleController {
     @GetMapping
     public String showSchedule(Model model, Authentication authentication) {
         String userName = authentication.getName();
-        User user = userRepository.findByUsername(userName)
+        User user = userRepository.findByEmail(userName)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         List<BarberScheduleDTO> schedule = scheduleService.getAllSchedulesForBarber(user.getId());
@@ -39,7 +39,7 @@ public class BarberScheduleController {
     public String saveSchedule(@ModelAttribute("form") BarberScheduleDTO dto,
                                Authentication authentication) {
         String userName = authentication.getName();
-        User user = userRepository.findByUsername(userName)
+        User user = userRepository.findByEmail(userName)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         dto.setBarberId(user.getId());
@@ -53,7 +53,7 @@ public class BarberScheduleController {
     public BarberScheduleDTO getScheduleForDay(@PathVariable DayOfWeek day,
                                                Authentication authentication) {
         String username = authentication.getName();
-        User user = userRepository.findByUsername(username)
+        User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         return scheduleService.getScheduleForBarberAndDay(user.getId(), day);
@@ -64,7 +64,7 @@ public class BarberScheduleController {
                                      Model model,
                                      Authentication authentication) {
         String userName = authentication.getName();
-        User user = userRepository.findByUsername(userName)
+        User user = userRepository.findByEmail(userName)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         List<BarberScheduleDTO> schedule = scheduleService.getAllSchedulesForBarber(user.getId());

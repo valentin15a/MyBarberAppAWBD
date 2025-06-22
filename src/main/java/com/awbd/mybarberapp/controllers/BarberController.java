@@ -11,6 +11,7 @@ import com.awbd.mybarberapp.services.AppointmentService;
 import com.awbd.mybarberapp.services.BarberProcedureService;
 import com.awbd.mybarberapp.services.security.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
@@ -32,10 +33,10 @@ public class BarberController {
     private final UserRepository userRepository;
     private final AppointmentService appointmentService;
 
-    @GetMapping("/home")
+    @GetMapping({"/", ""})
     public String barberHome(Model model, Principal principal) {
         String userName = principal.getName();
-        User user = userRepository.findByUsername(userName)
+        User user = userRepository.findByEmail(userName)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         Long barberId = user.getId();
         List<AppointmentDTO> createdAppointments = appointmentService
@@ -53,27 +54,40 @@ public class BarberController {
         appointment.setStatus(AppointmentStatus.valueOf(status.toUpperCase()));
         appointmentService.save(appointment);
 
-        return "redirect:/barber/home"; // 🔁 Înapoi la homepage după acțiune
+        return "redirect:/barber"; // 🔁 Înapoi la homepage după acțiune
     }
 
     @GetMapping("/appointments/history")
-    public String appointmentHistory(Model model, Principal principal) {
+    public String appointmentHistory(@RequestParam(defaultValue = "0") int page,
+                                     @RequestParam(defaultValue = "5") int size,
+                                     @RequestParam(defaultValue = "date") String sortField,
+                                     @RequestParam(defaultValue = "desc") String sortDir,
+                                     Model model, Principal principal) {
+
         String username = principal.getName();
-        User user = userRepository.findByUsername(username)
+        User user = userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        List<AppointmentDTO> history = appointmentService.getPastAppointmentsForBarber(user.getId());
+        Page<AppointmentDTO> apptPage = appointmentService
+                .getPastAppointmentsForBarberPaginated(user.getId(), page, size, sortField, sortDir);
 
-        model.addAttribute("historyAppointments", history);
-        return "barber/history"; // barber/history.html
+        model.addAttribute("historyAppointments", apptPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", apptPage.getTotalPages());
+        model.addAttribute("sortField", sortField);
+        model.addAttribute("sortDir", sortDir);
+        model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+
+        return "barber/history";
     }
+
 
 
 
     @GetMapping("/procedures")
     public String showProcedures(Model model, Authentication authentication) {
         String userName = authentication.getName();
-        User user = userRepository.findByUsername(userName)
+        User user = userRepository.findByEmail(userName)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         Long barberId = user.getId();
         model.addAttribute("procedures", procedureService.getAllForBarber(barberId));
@@ -86,7 +100,7 @@ public class BarberController {
     public String addProcedure(@ModelAttribute("form") BarberProcedureDTO dto,
                                Authentication authentication) {
         String userName = authentication.getName();
-        User user = userRepository.findByUsername(userName)
+        User user = userRepository.findByEmail(userName)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         dto.setBarberId(user.getId());
@@ -102,7 +116,7 @@ public class BarberController {
     @GetMapping("/procedures/edit/{id}")
     public String editProcedure(@PathVariable Long id, Model model, Principal principal, Authentication authentication) {
         String userName = authentication.getName();
-        User user = userRepository.findByUsername(userName)
+        User user = userRepository.findByEmail(userName)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         System.out.println("DTP Barber" + user.getAuthorities());
 
@@ -123,7 +137,7 @@ public class BarberController {
     @GetMapping("/procedures/delete/{id}")
     public String deleteProcedure(@PathVariable Long id, Principal principal) {
         String name = principal.getName();
-        User barber = userRepository.findByUsername(name)
+        User barber = userRepository.findByEmail(name)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         BarberProcedureDTO procedure = procedureService.findById(id);

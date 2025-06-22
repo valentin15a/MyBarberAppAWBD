@@ -12,14 +12,12 @@ import com.awbd.mybarberapp.repositories.BarberScheduleRepository;
 import com.awbd.mybarberapp.services.AppointmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -91,8 +89,13 @@ public class AppointmentServiceImpl implements AppointmentService {
         List<Appointment> appointments = appointmentRepository
                 .findByBarberIdAndStatus(barberId, AppointmentStatus.valueOf(status));
 
+        // 👉 Sortează după dată și oră
+        appointments.sort(Comparator
+                .comparing(Appointment::getDate)
+                .thenComparing(Appointment::getTime));
+
         return appointments.stream()
-                .map(appt -> appointmentMapper.toDto(appt, clientNameResolver,barberNameResolver)) // ← cu context!
+                .map(appt -> appointmentMapper.toDto(appt, clientNameResolver, barberNameResolver))
                 .toList();
     }
 
@@ -121,6 +124,20 @@ public class AppointmentServiceImpl implements AppointmentService {
 
         return appointmentsPage.map(appt -> appointmentMapper.toDto(appt, clientNameResolver, barberNameResolver));
     }
+
+    @Override
+    public Page<AppointmentDTO> getPastAppointmentsForBarberPaginated(Long barberId, int page, int size, String sortField, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase("asc") ? Sort.by(sortField).ascending() : Sort.by(sortField).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+
+        Page<Appointment> filtered = appointmentRepository.findByBarberIdAndStatusNot(
+                barberId, AppointmentStatus.CREATED, pageable
+        );
+        return filtered.map(appt -> appointmentMapper.toDto(appt, clientNameResolver, barberNameResolver));
+
+    }
+
 
 
 

@@ -21,6 +21,7 @@ public interface AppointmentService {
     List<AppointmentDTO> getPastAppointmentsForBarber(Long barberId);
     List<AppointmentDTO> getByClientIdDto(Long clientId);
     Page<AppointmentDTO> getByClientIdPaginated(Long clientId, int page, int size, String sortField, String sortDir);
+    Page<AppointmentDTO> getPastAppointmentsForBarberPaginated(Long barberId, int page, int size, String sortField, String sortDir);
 
 
 
