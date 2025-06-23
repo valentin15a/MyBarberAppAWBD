@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@Profile("mysql")
+@Profile({"mysql","h2"})
 public class SecurityJpaConfig {
 
     private final JpaUserDetailsService userDetailsService;
