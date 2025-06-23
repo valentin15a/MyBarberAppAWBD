@@ -6,19 +6,6 @@
     <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/webjars/font-awesome/6.5.2/css/all.min.css" />
 </head>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid"><a class="navbar-brand" th:href="@{/client}">ClientPanel</a>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link" th:href="@{/client}">Acasa</a></li>
-                <li class="nav-item"><a class="nav-link" th:href="@{/client/appointments/new}">Programare Noua</a></li>
-            </ul>
-            <form th:action="@{/logout}" method="post" class="d-flex">
-                <button class="btn btn-outline-light" type="submit">Logout</button>
-            </form>
-        </div>
-    </div>
-</nav>
 <body class="bg-light d-flex align-items-center justify-content-center" style="min-height: 100vh;">
 
 <div class="text-center">
