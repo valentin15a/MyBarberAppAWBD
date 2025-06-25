@@ -1,4 +1,4 @@
-package com.awbd.mybarberapp.TESTEOK;
+package com.awbd.mybarberapp;
 
 import com.awbd.mybarberapp.controllers.LoginRedirectController;
 import com.awbd.mybarberapp.controllers.MainController;
@@ -16,11 +16,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/**
- * Aici testăm:
- * 1) GET /login → view-ul "login"
- * 2) GET /login-success sub autentificare → redirect spre "/barber" sau "/client"
- */
+
 @WebMvcTest(controllers = {MainController.class, LoginRedirectController.class})
 @ActiveProfiles("h2")
 @Import(LoginIntegrationTest.TestSecurityConfig.class)     // Încarcă un UserDetailsService in-memory
@@ -49,11 +45,6 @@ class LoginIntegrationTest {
     }
 
 
-
-    /**
-     * În test folosim un UserDetailsService simplu, in-memory,
-     * ca să nu avem de-a face cu MySQL sau JPA.
-     */
     static class TestSecurityConfig {
         @org.springframework.context.annotation.Bean
         InMemoryUserDetailsManager userDetailsService() {

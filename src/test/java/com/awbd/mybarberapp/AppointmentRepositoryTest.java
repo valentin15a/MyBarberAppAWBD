@@ -1,4 +1,4 @@
-package com.awbd.mybarberapp.TESTEOK;
+package com.awbd.mybarberapp;
 
 import com.awbd.mybarberapp.domain.Appointment;
 import com.awbd.mybarberapp.domain.AppointmentStatus;

@@ -1,4 +1,4 @@
-package com.awbd.mybarberapp.TESTEOK;
+package com.awbd.mybarberapp;
 
 import com.awbd.mybarberapp.repositories.security.UserRepository;
 import com.awbd.mybarberapp.services.security.JpaUserDetailsService;

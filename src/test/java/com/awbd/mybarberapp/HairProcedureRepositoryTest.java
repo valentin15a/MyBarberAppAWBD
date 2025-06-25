@@ -1,4 +1,4 @@
-package com.awbd.mybarberapp.TESTEOK;
+package com.awbd.mybarberapp;
 
 import com.awbd.mybarberapp.domain.HairProcedure;
 import com.awbd.mybarberapp.repositories.HairProcedureRepository;

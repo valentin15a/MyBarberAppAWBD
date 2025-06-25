@@ -1,4 +1,4 @@
-package com.awbd.mybarberapp.TESTEOK;
+package com.awbd.mybarberapp;
 
 import com.awbd.mybarberapp.domain.Authority;
 import com.awbd.mybarberapp.domain.HairProcedure;
@@ -32,14 +32,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest(properties = {
-        "spring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1",
-        "spring.datasource.username=sa",
-        "spring.datasource.password=",
-        "spring.datasource.driverClassName=org.h2.Driver",
-        "spring.jpa.hibernate.ddl-auto=create-drop",
-        "spring.sql.init.platform=h2"
-})
+@SpringBootTest()
 @AutoConfigureMockMvc
 @ActiveProfiles("h2")
 @Import(TestSecurityConfig.class)
@@ -57,13 +50,12 @@ class AppointmentIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        // golim tabelele
         appointmentRepository.deleteAll();
         hairProcedureRepository.deleteAll();
         userRepository.deleteAll();
         authorityRepository.deleteAll();
 
-        // roluri
+
         Authority clientRole = new Authority();
         clientRole.setRole("CLIENT");
         clientRole = authorityRepository.save(clientRole);
@@ -72,7 +64,7 @@ class AppointmentIntegrationTest {
         barberRole.setRole("BARBER");
         barberRole = authorityRepository.save(barberRole);
 
-        // utilizator client
+
         client = new User();
         client.setEmail("cl3i@test.com");
 
@@ -85,7 +77,7 @@ class AppointmentIntegrationTest {
         client.setUsername("Cli");
         client = userRepository.save(client);
 
-        // utilizator barber
+
         barber = new com.awbd.mybarberapp.services.security.User();
         barber.setEmail("barb@test.com");
         barber.setPassword(passwordEncoder.encode("pass2"));
@@ -97,7 +89,7 @@ class AppointmentIntegrationTest {
         barber.setUsername("barb");
         barber = userRepository.save(barber);
 
-        // proceduri
+
         hp1 = new HairProcedure();
         hp1.setName("Cut");
         hp1 = hairProcedureRepository.save(hp1);
@@ -115,7 +107,7 @@ class AppointmentIntegrationTest {
     void clientCreatesAppointment_inH2() throws Exception {
 
         MvcResult login= mockMvc.perform(formLogin("/perform_login")
-                        .user("email", "cl3i@test.com")     // cheia trebuie să corespundă cu .usernameParameter("email")
+                        .user("email", "cl3i@test.com")
                         .password("pass1"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/login-success")).andReturn();
@@ -139,7 +131,7 @@ class AppointmentIntegrationTest {
 
         // 3) Verificăm ce a rămas în H2
         Appointment appt = appointmentRepository.findByClientId(client.getId()).get(0);
-        appt.getProcedures().size(); // 👈 forțează încărcarea colecției
+        appt.getProcedures().size();
 
 
 
